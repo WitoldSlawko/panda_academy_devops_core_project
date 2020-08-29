@@ -1,0 +1,7 @@
+<servers>
+    <server>
+        <id>artifactory</id>
+        <username>admin</username>
+        <password>pandapass</password>
+    </server>
+</servers>
