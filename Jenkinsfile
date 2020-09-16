@@ -34,7 +34,7 @@ pipeline {
         }
         stage('Run Docker container') {
             steps {
-                sh 'docker run -d -p 0.0.0.0:8080:8083 --name pandaapp -t ${IMAGE}:${VERSION}'
+                sh 'docker run -d -p 0.0.0.0:8083:8083 --name pandaapp -t ${IMAGE}:${VERSION}'
             }
         } 
         stage('Test selenium') {
