@@ -6,6 +6,10 @@ pipeline {
         // Install the Maven version configured as "M3" and add it to the path.
           maven 'auto_maven'
     }
+    environment {
+        IMAGE = readMavenPom().getArtifactId()
+        VERSION = readMavenPom().getVersion()
+    }
     stages {
         stage('Clean running previous app') {
             steps {
@@ -48,6 +52,8 @@ pipeline {
         }
         post {
             always {
+               sh 'docker stop pandaapp'
+               deleteDir()
             }
         }
             // post {
