@@ -50,12 +50,12 @@ pipeline {
                 sh 'mvn -gs $MAVEN_GLOBAL_SETTINGS deploy'
               }
             }
-        }
-        post {
-            always {
-               sh 'docker stop pandaapp'
-               deleteDir()
-            }
+            post {
+               always {
+                 sh 'docker stop pandaapp'
+                 deleteDir()
+              }
+           }
         }
             // post {
             //     // If Maven was able to run the tests, even if some of the test
