@@ -19,7 +19,8 @@ pipeline {
         stage('Get Code') {
             steps {
                 // Get some code from a GitHub repository
-                git branch: 'feature-panda/selenium-grid', credentialsId: 'GitHub', url: 'https://github.com/WitoldSlawko/panda_academy_devops_core_project.git'
+                // git branch: 'feature-panda/selenium-grid', credentialsId: 'GitHub', url: 'https://github.com/WitoldSlawko/panda_academy_devops_core_project.git'
+                checkout scm
             }
         }
         stage('Build and Junit') {
