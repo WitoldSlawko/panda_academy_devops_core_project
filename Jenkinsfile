@@ -5,6 +5,8 @@ pipeline {
     tools {
         // Install the Maven version configured as "M3" and add it to the path.
           maven 'auto_maven'
+          terraform 'Terraform'
+          ANSIBLE = tool name: 'Ansible', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
     }
     environment {
         IMAGE = readMavenPom().getArtifactId()
@@ -50,12 +52,26 @@ pipeline {
                 sh 'mvn -gs $MAVEN_GLOBAL_SETTINGS deploy'
               }
             }
-            post {
-               always {
-                 sh 'docker stop pandaapp'
-                 deleteDir()
-              }
-           }
+        }
+        stage('Run terraform') {
+            steps {
+                dir('infrastructure/terraform') {                
+                    sh 'terraform init && terraform apply -var-file ./example.tfvars -auto-approve '
+                } 
+            }
+        }
+        stage('Copy Ansible role') {
+               steps {
+                   sh 'cp -r infrastructure/ansible/panda/ /etc/ansible/roles/'
+                }
+        }
+        stage('Run Ansible') {
+               steps {
+                dir('infrastructure/ansible') {                
+                    sh 'chmod 400 ../pand-new-keys.pem'
+                    sh 'ansible-playbook -i ./inventory playbook.yml'
+                } 
+            }
         }
             // post {
             //     // If Maven was able to run the tests, even if some of the test
@@ -65,5 +81,12 @@ pipeline {
             //         archiveArtifacts 'target/*.jar'
             //     }
             // }
+        post {
+               always {
+                 sh 'docker stop pandaapp'
+                 deleteDir()
+              }
+           }
+
         }
     }
