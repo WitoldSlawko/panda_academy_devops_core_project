@@ -6,11 +6,11 @@ pipeline {
         // Install the Maven version configured as "M3" and add it to the path.
           maven 'auto_maven'
           terraform 'Terraform'
-          ANSIBLE = tool name: 'Ansible', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
     }
     environment {
         IMAGE = readMavenPom().getArtifactId()
         VERSION = readMavenPom().getVersion()
+        ANSIBLE = tool name: 'Ansible', type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
     }
     stages {
         stage('Clean running previous app') {
@@ -81,6 +81,7 @@ pipeline {
             //         archiveArtifacts 'target/*.jar'
             //     }
             // }
+       }
         post {
                always {
                  sh 'docker stop pandaapp'
@@ -88,5 +89,4 @@ pipeline {
               }
            }
 
-        }
     }
